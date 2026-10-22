@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LiftingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('markets', MarketController::class)->except('show');
     Route::resource('sales-reps', SalesRepController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/daily-sales', [ReportController::class, 'dailySales'])->name('reports.daily-sales');
+    Route::get('/reports/sr-wise', [ReportController::class, 'srWise'])->name('reports.sr-wise');
+    Route::get('/reports/product-wise', [ReportController::class, 'productWise'])->name('reports.product-wise');
+    Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
+    Route::get('/reports/credit', [ReportController::class, 'credit'])->name('reports.credit');
 
     Route::get('/company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile.edit');
     Route::put('/company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');

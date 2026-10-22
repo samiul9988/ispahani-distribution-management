@@ -27,6 +27,7 @@
             <a href="{{ route('liftings.index') }}" class="{{ request()->routeIs('liftings.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Lifting / Purchase</a>
             <a href="{{ route('stock.index') }}" class="{{ request()->routeIs('stock.*') ? 'active' : '' }}"><i class="bi bi-boxes me-2"></i>Stock Ledger</a>
             <a href="{{ route('cash-credit.index') }}" class="{{ request()->routeIs('cash-credit.*') ? 'active' : '' }}"><i class="bi bi-cash-coin me-2"></i>Cash & Credit</a>
+            <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line me-2"></i>Reports</a>
             <hr class="text-secondary">
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Products</a>
             <a href="{{ route('sales-reps.index') }}" class="{{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge me-2"></i>Sales Reps</a>
