@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CashCreditController;
+use App\Http\Controllers\ChallanController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\DashboardController;
@@ -44,9 +46,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('supplier-payments', SupplierPaymentController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+
     Route::get('/daily-sales', [DailySaleController::class, 'index'])->name('daily-sales.index');
     Route::get('/daily-sales/entry', [DailySaleController::class, 'entry'])->name('daily-sales.entry');
     Route::post('/daily-sales/entry', [DailySaleController::class, 'save'])->name('daily-sales.save');
+    Route::get('/daily-sales/challan', [ChallanController::class, 'show'])->name('daily-sales.challan');
 
     Route::get('/liftings', [LiftingController::class, 'index'])->name('liftings.index');
     Route::get('/liftings/entry', [LiftingController::class, 'entry'])->name('liftings.entry');

@@ -35,6 +35,7 @@
             <a href="{{ route('company-profile.edit') }}" class="{{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building me-2"></i>Company Profile</a>
             <a href="{{ route('supplier-payments.index') }}" class="{{ request()->routeIs('supplier-payments.*') ? 'active' : '' }}"><i class="bi bi-receipt me-2"></i>Supplier Payments</a>
             <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'active' : '' }}"><i class="bi bi-wallet2 me-2"></i>Expenses</a>
+            <a href="{{ route('audit-logs.index') }}" class="{{ request()->routeIs('audit-logs.*') ? 'active' : '' }}"><i class="bi bi-clock-history me-2"></i>Audit Log</a>
             <hr class="text-secondary">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

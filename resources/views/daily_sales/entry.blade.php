@@ -21,6 +21,11 @@
         <div class="col-md-2">
             <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-arrow-repeat"></i> Switch</button>
         </div>
+        @if ($salesRepId)
+            <div class="col-md-3 text-end">
+                <a href="{{ route('daily-sales.challan', ['sale_date' => $saleDate, 'sales_rep_id' => $salesRepId]) }}" target="_blank" class="btn btn-outline-danger"><i class="bi bi-printer"></i> Print Challan</a>
+            </div>
+        @endif
     </form>
 </div>
 
