@@ -5,12 +5,14 @@ use App\Http\Controllers\CashCreditController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\LiftingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SupplierPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -38,6 +40,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile.edit');
     Route::put('/company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
+
+    Route::resource('supplier-payments', SupplierPaymentController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/daily-sales', [DailySaleController::class, 'index'])->name('daily-sales.index');
     Route::get('/daily-sales/entry', [DailySaleController::class, 'entry'])->name('daily-sales.entry');

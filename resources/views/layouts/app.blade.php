@@ -33,6 +33,8 @@
             <a href="{{ route('sales-reps.index') }}" class="{{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge me-2"></i>Sales Reps</a>
             <a href="{{ route('markets.index') }}" class="{{ request()->routeIs('markets.*') ? 'active' : '' }}"><i class="bi bi-map me-2"></i>Markets</a>
             <a href="{{ route('company-profile.edit') }}" class="{{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building me-2"></i>Company Profile</a>
+            <a href="{{ route('supplier-payments.index') }}" class="{{ request()->routeIs('supplier-payments.*') ? 'active' : '' }}"><i class="bi bi-receipt me-2"></i>Supplier Payments</a>
+            <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'active' : '' }}"><i class="bi bi-wallet2 me-2"></i>Expenses</a>
             <hr class="text-secondary">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

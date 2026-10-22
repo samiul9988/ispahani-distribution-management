@@ -75,6 +75,15 @@
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card card-kpi p-3">
+            <div class="text-muted small">Today's Expense</div>
+            <div class="fs-5 fw-semibold text-warning">{{ number_format($todayExpense, 2) }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card card-kpi p-3">
             <div class="text-muted small">Active Products</div>
             <div class="fs-5 fw-bold">{{ $productCount }}</div>
         </div>

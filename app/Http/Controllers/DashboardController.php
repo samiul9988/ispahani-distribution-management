@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\CashCreditEntry;
 use App\Models\CompanyProfile;
 use App\Models\DailySale;
+use App\Models\Expense;
 use App\Models\Lifting;
 use App\Models\Product;
 use App\Models\SalesRep;
+use App\Models\SupplierPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
@@ -33,7 +35,13 @@ class DashboardController extends Controller
             ->join('products', 'products.id', '=', 'daily_sales.product_id')
             ->selectRaw('SUM(daily_sales.sales_pcs * products.cost_price) as total')
             ->value('total') ?? 0;
-        $todayProfit = $todayNet - $todayCost;
+        $todayExpense = Expense::where('expense_date', $selectedDate)->sum('amount');
+        $todayProfit = $todayNet - $todayCost - $todayExpense;
+
+        $openingDue = $company?->supplier_due ?? 0;
+        $totalLiftedToDate = Lifting::where('lifting_date', '<=', $selectedDate)->sum('value');
+        $totalPaidToDate = SupplierPayment::where('payment_date', '<=', $selectedDate)->sum('amount');
+        $supplierDue = $openingDue + $totalLiftedToDate - $totalPaidToDate;
 
         $monthlyDaily = DailySale::whereBetween('sale_date', [$month->copy()->startOfMonth(), $month->copy()->endOfMonth()])
             ->selectRaw('sale_date, SUM(net_amount) as total_net')
@@ -77,7 +85,8 @@ class DashboardController extends Controller
             'todayPayment' => $todayPayment,
             'todayProfit' => $todayProfit,
             'stockValue' => $stockValue,
-            'supplierDue' => $company?->supplier_due ?? 0,
+            'todayExpense' => $todayExpense,
+            'supplierDue' => $supplierDue,
             'productCount' => $productCount,
             'salesRepCount' => $salesRepCount,
             'lowStockCount' => $lowStockCount,
