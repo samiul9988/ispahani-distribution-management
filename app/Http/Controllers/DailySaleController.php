@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashCreditEntry;
 use App\Models\DailySale;
 use App\Models\Product;
 use App\Models\SalesRep;
@@ -41,11 +42,21 @@ class DailySaleController extends Controller
         $products = Product::where('is_active', true)->orderBy('name')->get();
 
         $existing = [];
+        $existingCredit = null;
+        $openingBalance = 0;
+
         if ($salesRepId) {
             $existing = DailySale::where('sale_date', $saleDate)
                 ->where('sales_rep_id', $salesRepId)
                 ->get()
                 ->keyBy('product_id');
+
+            $existingCredit = CashCreditEntry::where('entry_date', $saleDate)
+                ->where('sales_rep_id', $salesRepId)
+                ->first();
+
+            $rep = $salesReps->firstWhere('id', (int) $salesRepId);
+            $openingBalance = $rep ? $this->previousClosingBalance($rep, $saleDate) : 0;
         }
 
         return view('daily_sales.entry', [
@@ -54,6 +65,8 @@ class DailySaleController extends Controller
             'salesReps' => $salesReps,
             'products' => $products,
             'existing' => $existing,
+            'existingCredit' => $existingCredit,
+            'openingBalance' => $openingBalance,
         ]);
     }
 
@@ -67,6 +80,9 @@ class DailySaleController extends Controller
             'rows.*.loading_pcs' => ['nullable', 'numeric', 'min:0'],
             'rows.*.unloading_pcs' => ['nullable', 'numeric', 'min:0'],
             'rows.*.discount' => ['nullable', 'numeric', 'min:0'],
+            'collection' => ['nullable', 'numeric', 'min:0'],
+            'credit_collection' => ['nullable', 'numeric', 'min:0'],
+            'route_shortage' => ['nullable', 'numeric'],
         ]);
 
         $saleDate = $validated['sale_date'];
@@ -117,10 +133,49 @@ class DailySaleController extends Controller
                     ]
                 );
             }
+
+            $rep = SalesRep::find($salesRepId);
+            $salesAmount = DailySale::where('sale_date', $saleDate)
+                ->where('sales_rep_id', $salesRepId)
+                ->sum('net_amount');
+
+            $collection = (float) ($validated['collection'] ?? 0);
+            $creditCollection = (float) ($validated['credit_collection'] ?? 0);
+            $routeShortage = (float) ($validated['route_shortage'] ?? 0);
+
+            $credit = max(0, $salesAmount - $collection);
+            $openingBalance = $this->previousClosingBalance($rep, $saleDate);
+            $routeCredit = $openingBalance + $credit - $creditCollection;
+
+            CashCreditEntry::updateOrCreate(
+                [
+                    'entry_date' => $saleDate,
+                    'sales_rep_id' => $salesRepId,
+                ],
+                [
+                    'sales_amount' => $salesAmount,
+                    'collection' => $collection,
+                    'credit' => $credit,
+                    'credit_collection' => $creditCollection,
+                    'opening_credit_balance' => $openingBalance,
+                    'route_credit' => $routeCredit,
+                    'route_shortage' => $routeShortage,
+                ]
+            );
         });
 
         return redirect()
             ->route('daily-sales.entry', ['sale_date' => $saleDate, 'sales_rep_id' => $salesRepId])
-            ->with('success', 'Daily sales entry saved for '.$saleDate.'.');
+            ->with('success', 'Sale entry saved for '.$saleDate.' — sales, stock and cash/credit all updated.');
+    }
+
+    private function previousClosingBalance(SalesRep $rep, string $saleDate): float
+    {
+        $previous = CashCreditEntry::where('sales_rep_id', $rep->id)
+            ->where('entry_date', '<', $saleDate)
+            ->orderByDesc('entry_date')
+            ->first();
+
+        return $previous ? (float) $previous->route_credit : (float) $rep->opening_credit;
     }
 }

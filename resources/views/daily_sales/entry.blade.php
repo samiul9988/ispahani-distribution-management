@@ -83,8 +83,42 @@
         </div>
     </div>
 
+    <div class="card p-3 mt-3">
+        <h6 class="mb-3"><i class="bi bi-cash-coin"></i> Payment & Credit (same transaction)</h6>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Opening Balance</label>
+                <div class="fs-5" id="openingBalanceDisplay">{{ number_format($openingBalance, 2) }}</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Net Sales (this entry)</label>
+                <div class="fs-5" id="netSalesDisplay">0.00</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Collection (Cash received today)</label>
+                <input type="number" step="0.01" min="0" class="form-control" id="inpCollection" name="collection" value="{{ $existingCredit?->collection ?? 0 }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Credit Collection (old due paid)</label>
+                <input type="number" step="0.01" min="0" class="form-control" id="inpCrCollection" name="credit_collection" value="{{ $existingCredit?->credit_collection ?? 0 }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Credit (today, unpaid)</label>
+                <div class="fs-5 text-warning" id="creditDisplay">{{ number_format($existingCredit?->credit ?? 0, 2) }}</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Route Credit (closing balance)</label>
+                <div class="fs-5 fw-bold text-danger" id="routeCreditDisplay">{{ number_format($existingCredit?->route_credit ?? 0, 2) }}</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Route Shortage</label>
+                <input type="number" step="0.01" class="form-control" name="route_shortage" value="{{ $existingCredit?->route_shortage ?? 0 }}">
+            </div>
+        </div>
+    </div>
+
     <div class="d-flex justify-content-end mt-3">
-        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Entry</button>
+        <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-save"></i> Save Sale (Stock + Cash & Credit)</button>
     </div>
 </form>
 @else
@@ -94,7 +128,22 @@
 
 @push('scripts')
 <script>
+const openingBalance = {{ $openingBalance ?? 0 }};
 function fmt(n) { return (Math.round(n * 100) / 100).toFixed(2); }
+
+function recalcCredit(netSales) {
+    const collection = parseFloat(document.getElementById('inpCollection')?.value) || 0;
+    const crCollection = parseFloat(document.getElementById('inpCrCollection')?.value) || 0;
+    const credit = Math.max(0, netSales - collection);
+    const routeCredit = openingBalance + credit - crCollection;
+
+    const netDisplay = document.getElementById('netSalesDisplay');
+    const creditDisplay = document.getElementById('creditDisplay');
+    const routeCreditDisplay = document.getElementById('routeCreditDisplay');
+    if (netDisplay) netDisplay.textContent = fmt(netSales);
+    if (creditDisplay) creditDisplay.textContent = fmt(credit);
+    if (routeCreditDisplay) routeCreditDisplay.textContent = fmt(routeCredit);
+}
 
 function recalcRow(row) {
     const price = parseFloat(row.dataset.price) || 0;
@@ -128,10 +177,11 @@ function recalcAll() {
     const gn = document.getElementById('grandNet');
     if (gt) gt.textContent = fmt(grandTaka);
     if (gn) gn.textContent = fmt(grandNet);
+    recalcCredit(grandNet);
 }
 
 document.addEventListener('input', (e) => {
-    if (e.target.matches('.inp-ctn, .inp-pcs, .inp-unload, .inp-discount')) {
+    if (e.target.matches('.inp-ctn, .inp-pcs, .inp-unload, .inp-discount, #inpCollection, #inpCrCollection')) {
         recalcAll();
     }
 });
