@@ -30,9 +30,11 @@
             <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line me-2"></i>Reports</a>
             <hr class="text-secondary">
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Products</a>
+            <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Categories</a>
             <a href="{{ route('sales-reps.index') }}" class="{{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge me-2"></i>Sales Reps</a>
             <a href="{{ route('markets.index') }}" class="{{ request()->routeIs('markets.*') ? 'active' : '' }}"><i class="bi bi-map me-2"></i>Markets</a>
             <a href="{{ route('company-profile.edit') }}" class="{{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building me-2"></i>Company Profile</a>
+            <a href="{{ route('suppliers.index') }}" class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Suppliers</a>
             <a href="{{ route('supplier-payments.index') }}" class="{{ request()->routeIs('supplier-payments.*') ? 'active' : '' }}"><i class="bi bi-receipt me-2"></i>Supplier Payments</a>
             <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'active' : '' }}"><i class="bi bi-wallet2 me-2"></i>Expenses</a>
             <a href="{{ route('audit-logs.index') }}" class="{{ request()->routeIs('audit-logs.*') ? 'active' : '' }}"><i class="bi bi-clock-history me-2"></i>Audit Log</a>

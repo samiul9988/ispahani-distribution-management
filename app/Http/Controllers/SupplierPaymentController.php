@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyProfile;
 use App\Models\Lifting;
+use App\Models\Supplier;
 use App\Models\SupplierPayment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,21 +21,34 @@ class SupplierPaymentController extends Controller
         $totalPaid = SupplierPayment::sum('amount');
         $currentDue = $openingDue + $totalLifted - $totalPaid;
 
-        $payments = SupplierPayment::orderByDesc('payment_date')->paginate(20);
+        $supplierBreakdown = Supplier::withSum('liftings', 'value')
+            ->withSum('payments', 'amount')
+            ->get()
+            ->map(fn (Supplier $s) => [
+                'supplier' => $s,
+                'lifted' => $s->liftings_sum_value ?? 0,
+                'paid' => $s->payments_sum_amount ?? 0,
+                'due' => ($s->opening_balance) + ($s->liftings_sum_value ?? 0) - ($s->payments_sum_amount ?? 0),
+            ]);
+
+        $payments = SupplierPayment::with('supplier')->orderByDesc('payment_date')->paginate(20);
 
         return view('supplier_payments.index', compact(
-            'payments', 'openingDue', 'totalLifted', 'totalPaid', 'currentDue'
+            'payments', 'openingDue', 'totalLifted', 'totalPaid', 'currentDue', 'supplierBreakdown'
         ));
     }
 
     public function create(): View
     {
-        return view('supplier_payments.create');
+        $suppliers = Supplier::where('is_active', true)->orderBy('name')->get();
+
+        return view('supplier_payments.create', compact('suppliers'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
+            'supplier_id' => ['required', 'exists:suppliers,id'],
             'payment_date' => ['required', 'date'],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'method' => ['nullable', 'string', 'max:50'],

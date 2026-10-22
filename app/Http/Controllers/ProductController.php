@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class ProductController extends Controller
     {
         $search = $request->get('search');
 
-        $products = Product::when($search, function ($query, $search) {
+        $products = Product::with('category')->when($search, function ($query, $search) {
             $query->where('name', 'like', "%{$search}%");
         })->orderBy('name')->paginate(25)->withQueryString();
 
@@ -22,7 +23,9 @@ class ProductController extends Controller
 
     public function create(): View
     {
-        return view('products.create');
+        $categories = Category::orderBy('name')->get();
+
+        return view('products.create', compact('categories'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -36,7 +39,9 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        return view('products.edit', compact('product'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
@@ -63,6 +68,7 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['nullable', 'exists:categories,id'],
             'price' => ['required', 'numeric', 'min:0'],
             'cost_price' => ['nullable', 'numeric', 'min:0'],
             'pic' => ['required', 'integer', 'min:1'],

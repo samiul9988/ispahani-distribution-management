@@ -9,6 +9,14 @@
             <label class="form-label">Lifting Date</label>
             <input type="date" name="lifting_date" class="form-control" value="{{ $liftingDate }}" required>
         </div>
+        <div class="col-md-3">
+            <label class="form-label">Supplier</label>
+            <select name="supplier_id" class="form-select">
+                @foreach ($suppliers as $sup)
+                    <option value="{{ $sup->id }}" @selected($supplierId == $sup->id)>{{ $sup->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="col-md-2">
             <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-arrow-repeat"></i> Switch</button>
         </div>
@@ -18,6 +26,7 @@
 <form method="POST" action="{{ route('liftings.save') }}" id="liftingForm">
     @csrf
     <input type="hidden" name="lifting_date" value="{{ $liftingDate }}">
+    <input type="hidden" name="supplier_id" value="{{ $supplierId }}">
 
     <div class="card">
         <div class="table-responsive">

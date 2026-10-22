@@ -7,6 +7,14 @@
     <form method="POST" action="{{ route('supplier-payments.store') }}">
         @csrf
         <div class="mb-3">
+            <label class="form-label">Supplier</label>
+            <select name="supplier_id" class="form-select" required>
+                @foreach ($suppliers as $sup)
+                    <option value="{{ $sup->id }}">{{ $sup->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Payment Date</label>
             <input type="date" name="payment_date" class="form-control" value="{{ old('payment_date', now()->format('Y-m-d')) }}" required>
         </div>

@@ -1,0 +1,21 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Category')
+
+@section('content')
+<div class="card p-4" style="max-width:500px;">
+    <form method="POST" action="{{ route('categories.update', $category) }}">
+        @csrf @method('PUT')
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $category->name) }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input type="text" name="description" class="form-control" value="{{ old('description', $category->description) }}">
+        </div>
+        <button class="btn btn-primary" type="submit">Update</button>
+        <a href="{{ route('categories.index') }}" class="btn btn-link">Cancel</a>
+    </form>
+</div>
+@endsection

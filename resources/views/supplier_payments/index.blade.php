@@ -30,6 +30,27 @@
     </div>
 </div>
 
+<div class="card mb-3">
+    <div class="table-responsive">
+        <table class="table table-sm mb-0">
+            <thead>
+                <tr><th>Supplier</th><th class="text-end">Opening</th><th class="text-end">Lifted</th><th class="text-end">Paid</th><th class="text-end">Due</th></tr>
+            </thead>
+            <tbody>
+                @foreach ($supplierBreakdown as $row)
+                    <tr>
+                        <td>{{ $row['supplier']->name }}</td>
+                        <td class="text-end">{{ number_format($row['supplier']->opening_balance, 2) }}</td>
+                        <td class="text-end">{{ number_format($row['lifted'], 2) }}</td>
+                        <td class="text-end">{{ number_format($row['paid'], 2) }}</td>
+                        <td class="text-end fw-semibold {{ $row['due'] > 0 ? 'text-danger' : '' }}">{{ number_format($row['due'], 2) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="d-flex justify-content-end mb-3">
     <a href="{{ route('supplier-payments.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Record Payment</a>
 </div>
@@ -38,12 +59,13 @@
     <div class="table-responsive">
         <table class="table mb-0">
             <thead>
-                <tr><th>Date</th><th>Method</th><th>Note</th><th class="text-end">Amount</th><th class="text-end">Action</th></tr>
+                <tr><th>Date</th><th>Supplier</th><th>Method</th><th>Note</th><th class="text-end">Amount</th><th class="text-end">Action</th></tr>
             </thead>
             <tbody>
                 @forelse ($payments as $p)
                     <tr>
                         <td>{{ $p->payment_date->format('d M Y') }}</td>
+                        <td>{{ $p->supplier?->name ?? '—' }}</td>
                         <td>{{ $p->method ?? '—' }}</td>
                         <td>{{ $p->note ?? '—' }}</td>
                         <td class="text-end fw-semibold">{{ number_format($p->amount, 2) }}</td>
@@ -55,7 +77,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="text-center text-muted py-4">No payments recorded yet.</td></tr>
+                    <tr><td colspan="6" class="text-center text-muted py-4">No payments recorded yet.</td></tr>
                 @endforelse
             </tbody>
         </table>

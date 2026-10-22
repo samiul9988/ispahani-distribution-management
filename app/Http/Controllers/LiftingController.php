@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lifting;
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,9 +28,12 @@ class LiftingController extends Controller
     {
         $data = $request->validate([
             'lifting_date' => ['nullable', 'date'],
+            'supplier_id' => ['nullable', 'exists:suppliers,id'],
         ]);
 
         $liftingDate = $data['lifting_date'] ?? now()->format('Y-m-d');
+        $suppliers = Supplier::where('is_active', true)->orderBy('name')->get();
+        $supplierId = $data['supplier_id'] ?? $suppliers->first()?->id;
 
         $products = Product::where('is_active', true)->orderBy('name')->get();
 
@@ -39,6 +43,8 @@ class LiftingController extends Controller
             'liftingDate' => $liftingDate,
             'products' => $products,
             'existing' => $existing,
+            'suppliers' => $suppliers,
+            'supplierId' => $supplierId,
         ]);
     }
 
@@ -46,6 +52,7 @@ class LiftingController extends Controller
     {
         $validated = $request->validate([
             'lifting_date' => ['required', 'date'],
+            'supplier_id' => ['required', 'exists:suppliers,id'],
             'rows' => ['required', 'array'],
             'rows.*.lifting_ctn' => ['nullable', 'numeric', 'min:0'],
             'rows.*.lifting_pcs' => ['nullable', 'numeric', 'min:0'],
@@ -53,8 +60,9 @@ class LiftingController extends Controller
         ]);
 
         $liftingDate = $validated['lifting_date'];
+        $supplierId = $validated['supplier_id'];
 
-        DB::transaction(function () use ($validated, $liftingDate) {
+        DB::transaction(function () use ($validated, $liftingDate, $supplierId) {
             foreach ($validated['rows'] as $productId => $row) {
                 $product = Product::find($productId);
                 if (! $product) {
@@ -81,6 +89,7 @@ class LiftingController extends Controller
                         'product_id' => $productId,
                     ],
                     [
+                        'supplier_id' => $supplierId,
                         'lifting_ctn' => $liftingCtn,
                         'lifting_pcs' => $liftingPcs,
                         'total_lifted_pcs' => $totalLiftedPcs,

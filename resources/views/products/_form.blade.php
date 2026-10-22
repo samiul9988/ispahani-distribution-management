@@ -6,7 +6,13 @@
 </div>
 <div class="mb-3">
     <label class="form-label">Category</label>
-    <input type="text" name="category" class="form-control" value="{{ old('category', $p?->category) }}" placeholder="e.g. Tea, Snacks">
+    <select name="category_id" class="form-select">
+        <option value="">— None —</option>
+        @foreach ($categories as $cat)
+            <option value="{{ $cat->id }}" @selected(old('category_id', $p?->category_id) == $cat->id)>{{ $cat->name }}</option>
+        @endforeach
+    </select>
+    <div class="form-text">Manage categories under <a href="{{ route('categories.index') }}">Categories</a>.</div>
 </div>
 <div class="row">
     <div class="col-md-6 mb-3">

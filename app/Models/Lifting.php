@@ -12,7 +12,7 @@ class Lifting extends Model
     use HasFactory, Auditable;
 
     protected $fillable = [
-        'lifting_date', 'product_id', 'lifting_ctn', 'lifting_pcs', 'total_lifted_pcs', 'value',
+        'lifting_date', 'product_id', 'supplier_id', 'lifting_ctn', 'lifting_pcs', 'total_lifted_pcs', 'value',
     ];
 
     protected $casts = [
@@ -22,5 +22,10 @@ class Lifting extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

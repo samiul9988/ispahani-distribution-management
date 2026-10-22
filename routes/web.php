@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CashCreditController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChallanController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierPaymentController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('markets', MarketController::class)->except('show');
     Route::resource('sales-reps', SalesRepController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
@@ -43,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile.edit');
     Route::put('/company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 
+    Route::resource('suppliers', SupplierController::class)->except('show');
     Route::resource('supplier-payments', SupplierPaymentController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
