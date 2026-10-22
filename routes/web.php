@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CashCreditController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\DashboardController;
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 
-    // Placeholder route for upcoming module (built in next step)
-    Route::get('/cash-credit', fn () => view('placeholder', ['title' => 'Cash & Credit']))->name('cash-credit.index');
+    Route::get('/cash-credit', [CashCreditController::class, 'index'])->name('cash-credit.index');
+    Route::get('/cash-credit/entry', [CashCreditController::class, 'entry'])->name('cash-credit.entry');
+    Route::post('/cash-credit/entry', [CashCreditController::class, 'save'])->name('cash-credit.save');
 });
