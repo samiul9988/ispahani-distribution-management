@@ -45,6 +45,7 @@
                     <th class="text-end">Opening (pcs)</th>
                     <th class="text-end">Lifted (pcs)</th>
                     <th class="text-end">Sold (pcs)</th>
+                    <th class="text-end">Damaged (pcs)</th>
                     <th class="text-end">Closing (pcs)</th>
                     <th class="text-end">Closing (ctn)</th>
                     <th class="text-end">Stock Value</th>
@@ -58,6 +59,7 @@
                         <td class="text-end">{{ number_format($row['opening_pcs'], 2) }}</td>
                         <td class="text-end">{{ number_format($row['lifted_pcs'], 2) }}</td>
                         <td class="text-end">{{ number_format($row['sold_pcs'], 2) }}</td>
+                        <td class="text-end text-danger">{{ number_format($row['damaged_pcs'], 2) }}</td>
                         <td class="text-end fw-semibold">{{ number_format($row['closing_pcs'], 2) }}</td>
                         <td class="text-end">{{ number_format($row['closing_ctn'], 2) }}</td>
                         <td class="text-end">{{ number_format($row['stock_value'], 2) }}</td>

@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChallanController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
+use App\Http\Controllers\DamagedStockController;
+use App\Http\Controllers\DamageSendingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\LiftingController;
@@ -62,6 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/liftings/entry', [LiftingController::class, 'save'])->name('liftings.save');
 
     Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+
+    Route::resource('damaged-stock', DamagedStockController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('damage-sendings', DamageSendingController::class)->only(['index', 'create', 'store']);
 
     Route::get('/cash-credit', [CashCreditController::class, 'index'])->name('cash-credit.index');
     Route::get('/cash-credit/entry', [CashCreditController::class, 'entry'])->name('cash-credit.entry');

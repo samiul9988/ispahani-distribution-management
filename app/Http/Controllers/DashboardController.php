@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CashCreditEntry;
 use App\Models\CompanyProfile;
 use App\Models\DailySale;
+use App\Models\DamagedStock;
 use App\Models\Expense;
 use App\Models\Lifting;
 use App\Models\Product;
@@ -113,12 +114,19 @@ class DashboardController extends Controller
             ->get()
             ->keyBy('product_id');
 
+        $damagedTotals = DamagedStock::where('damage_date', '<=', $asOf)
+            ->selectRaw('product_id, SUM(qty_pcs) as pcs')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
         $total = 0;
         foreach (Product::all() as $product) {
             $opening = ($product->opening_stock_ctn * $product->pic) + $product->opening_stock_pcs;
             $lifted = $liftedTotals->get($product->id)?->pcs ?? 0;
             $sold = $soldTotals->get($product->id)?->pcs ?? 0;
-            $closing = $opening + $lifted - $sold;
+            $damaged = $damagedTotals->get($product->id)?->pcs ?? 0;
+            $closing = $opening + $lifted - $sold - $damaged;
             $total += $closing * $product->price;
         }
 
@@ -139,12 +147,19 @@ class DashboardController extends Controller
             ->get()
             ->keyBy('product_id');
 
+        $damagedTotals = DamagedStock::where('damage_date', '<=', $asOf)
+            ->selectRaw('product_id, SUM(qty_pcs) as pcs')
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id');
+
         $count = 0;
         foreach (Product::where('is_active', true)->get() as $product) {
             $opening = ($product->opening_stock_ctn * $product->pic) + $product->opening_stock_pcs;
             $lifted = $liftedTotals->get($product->id)?->pcs ?? 0;
             $sold = $soldTotals->get($product->id)?->pcs ?? 0;
-            $closingCtn = $product->pic > 0 ? ($opening + $lifted - $sold) / $product->pic : 0;
+            $damaged = $damagedTotals->get($product->id)?->pcs ?? 0;
+            $closingCtn = $product->pic > 0 ? ($opening + $lifted - $sold - $damaged) / $product->pic : 0;
             if ($closingCtn < $product->low_stock_threshold_ctn) {
                 $count++;
             }

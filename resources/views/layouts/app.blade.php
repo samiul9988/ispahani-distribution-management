@@ -26,6 +26,8 @@
             <a href="{{ route('daily-sales.index') }}" class="{{ request()->routeIs('daily-sales.*') ? 'active' : '' }}"><i class="bi bi-journal-text me-2"></i>Daily Sales Entry</a>
             <a href="{{ route('liftings.index') }}" class="{{ request()->routeIs('liftings.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Lifting / Purchase</a>
             <a href="{{ route('stock.index') }}" class="{{ request()->routeIs('stock.*') ? 'active' : '' }}"><i class="bi bi-boxes me-2"></i>Stock Ledger</a>
+            <a href="{{ route('damaged-stock.index') }}" class="{{ request()->routeIs('damaged-stock.*') ? 'active' : '' }}"><i class="bi bi-exclamation-triangle me-2"></i>Damaged Stock</a>
+            <a href="{{ route('damage-sendings.index') }}" class="{{ request()->routeIs('damage-sendings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-up me-2"></i>Damage Sendings</a>
             <a href="{{ route('cash-credit.index') }}" class="{{ request()->routeIs('cash-credit.*') ? 'active' : '' }}"><i class="bi bi-cash-coin me-2"></i>Cash & Credit</a>
             <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line me-2"></i>Reports</a>
             <hr class="text-secondary">
