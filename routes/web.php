@@ -4,9 +4,11 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LiftingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesRepController;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -32,8 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/daily-sales/entry', [DailySaleController::class, 'entry'])->name('daily-sales.entry');
     Route::post('/daily-sales/entry', [DailySaleController::class, 'save'])->name('daily-sales.save');
 
-    // Placeholder routes for upcoming modules (built in next steps)
-    Route::get('/liftings', fn () => view('placeholder', ['title' => 'Lifting / Purchase']))->name('liftings.index');
-    Route::get('/stock', fn () => view('placeholder', ['title' => 'Stock Ledger']))->name('stock.index');
+    Route::get('/liftings', [LiftingController::class, 'index'])->name('liftings.index');
+    Route::get('/liftings/entry', [LiftingController::class, 'entry'])->name('liftings.entry');
+    Route::post('/liftings/entry', [LiftingController::class, 'save'])->name('liftings.save');
+
+    Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+
+    // Placeholder route for upcoming module (built in next step)
     Route::get('/cash-credit', fn () => view('placeholder', ['title' => 'Cash & Credit']))->name('cash-credit.index');
 });
