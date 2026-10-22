@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyProfileController;
+use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProductController;
@@ -27,8 +28,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile.edit');
     Route::put('/company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 
+    Route::get('/daily-sales', [DailySaleController::class, 'index'])->name('daily-sales.index');
+    Route::get('/daily-sales/entry', [DailySaleController::class, 'entry'])->name('daily-sales.entry');
+    Route::post('/daily-sales/entry', [DailySaleController::class, 'save'])->name('daily-sales.save');
+
     // Placeholder routes for upcoming modules (built in next steps)
-    Route::get('/daily-sales', fn () => view('placeholder', ['title' => 'Daily Sales Entry']))->name('daily-sales.index');
     Route::get('/liftings', fn () => view('placeholder', ['title' => 'Lifting / Purchase']))->name('liftings.index');
     Route::get('/stock', fn () => view('placeholder', ['title' => 'Stock Ledger']))->name('stock.index');
     Route::get('/cash-credit', fn () => view('placeholder', ['title' => 'Cash & Credit']))->name('cash-credit.index');
