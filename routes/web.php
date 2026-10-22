@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CashBoxController;
 use App\Http\Controllers\CashCreditController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChallanController;
@@ -71,4 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/cash-credit', [CashCreditController::class, 'index'])->name('cash-credit.index');
     Route::get('/cash-credit/entry', [CashCreditController::class, 'entry'])->name('cash-credit.entry');
     Route::post('/cash-credit/entry', [CashCreditController::class, 'save'])->name('cash-credit.save');
+
+    Route::get('/cash-box', [CashBoxController::class, 'index'])->name('cash-box.index');
+    Route::get('/cash-box/entry', [CashBoxController::class, 'entry'])->name('cash-box.entry');
+    Route::post('/cash-box/entry', [CashBoxController::class, 'save'])->name('cash-box.save');
 });

@@ -29,6 +29,7 @@
             <a href="{{ route('damaged-stock.index') }}" class="{{ request()->routeIs('damaged-stock.*') ? 'active' : '' }}"><i class="bi bi-exclamation-triangle me-2"></i>Damaged Stock</a>
             <a href="{{ route('damage-sendings.index') }}" class="{{ request()->routeIs('damage-sendings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-up me-2"></i>Damage Sendings</a>
             <a href="{{ route('cash-credit.index') }}" class="{{ request()->routeIs('cash-credit.*') ? 'active' : '' }}"><i class="bi bi-cash-coin me-2"></i>Cash & Credit</a>
+            <a href="{{ route('cash-box.index') }}" class="{{ request()->routeIs('cash-box.*') ? 'active' : '' }}"><i class="bi bi-safe me-2"></i>Cash Box</a>
             <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line me-2"></i>Reports</a>
             <hr class="text-secondary">
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Products</a>
