@@ -12,6 +12,7 @@ use App\Http\Controllers\DamagedStockController;
 use App\Http\Controllers\DamageSendingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FreeOfferController;
 use App\Http\Controllers\LiftingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProductController;
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('markets', MarketController::class)->except('show');
     Route::resource('sales-reps', SalesRepController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+    Route::resource('free-offers', FreeOfferController::class)->except('show');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/daily-sales', [ReportController::class, 'dailySales'])->name('reports.daily-sales');

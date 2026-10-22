@@ -34,6 +34,7 @@
             <hr class="text-secondary">
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Products</a>
             <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Categories</a>
+            <a href="{{ route('free-offers.index') }}" class="{{ request()->routeIs('free-offers.*') ? 'active' : '' }}"><i class="bi bi-gift me-2"></i>Free Offers</a>
             <a href="{{ route('sales-reps.index') }}" class="{{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge me-2"></i>Sales Reps</a>
             <a href="{{ route('markets.index') }}" class="{{ request()->routeIs('markets.*') ? 'active' : '' }}"><i class="bi bi-map me-2"></i>Markets</a>
             <a href="{{ route('company-profile.edit') }}" class="{{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building me-2"></i>Company Profile</a>

@@ -49,15 +49,36 @@
                         <th style="width:90px;">Unloading</th>
                         <th class="text-end">Sales Qty</th>
                         <th class="text-end">Total Taka</th>
-                        <th style="width:100px;">Discount</th>
+                        <th style="width:140px;">Discount</th>
                         <th class="text-end">Net Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($products as $product)
-                        @php $row = $existing->get($product->id); @endphp
-                        <tr class="product-row" data-price="{{ $product->price }}" data-pic="{{ $product->pic }}">
-                            <td>{{ $product->name }}</td>
+                        @php
+                            $row = $existing->get($product->id);
+                            $offer = $offers->get($product->id);
+                        @endphp
+                        <tr class="product-row" data-price="{{ $product->price }}" data-pic="{{ $product->pic }}"
+                            @if ($offer)
+                                data-offer-type="{{ $offer->type }}"
+                                data-offer-buy-qty="{{ $offer->buy_qty }}"
+                                data-offer-free-qty="{{ $offer->free_qty }}"
+                                data-offer-discount-amount="{{ $offer->discount_amount }}"
+                            @endif
+                        >
+                            <td>
+                                {{ $product->name }}
+                                @if ($offer)
+                                    <br><span class="badge bg-info text-dark"><i class="bi bi-gift"></i>
+                                        @if ($offer->type === 'free_qty')
+                                            Buy {{ $offer->buy_qty }} get {{ $offer->free_qty }} free
+                                        @else
+                                            Buy {{ $offer->buy_qty }} get ৳{{ $offer->discount_amount }} off
+                                        @endif
+                                    </span>
+                                @endif
+                            </td>
                             <td class="text-end">{{ number_format($product->price, 2) }}</td>
                             <td class="text-end">{{ $product->pic }}</td>
                             <td><input type="number" step="0.01" min="0" class="form-control form-control-sm inp-ctn" name="rows[{{ $product->id }}][loading_ctn]" value="{{ $row?->loading_ctn ?? 0 }}"></td>
@@ -66,7 +87,12 @@
                             <td><input type="number" step="0.01" min="0" class="form-control form-control-sm inp-unload" name="rows[{{ $product->id }}][unloading_pcs]" value="{{ $row?->unloading_pcs ?? 0 }}"></td>
                             <td class="text-end out-sales">{{ number_format($row?->sales_pcs ?? 0, 2) }}</td>
                             <td class="text-end out-taka">{{ number_format($row?->total_taka ?? 0, 2) }}</td>
-                            <td><input type="number" step="0.01" min="0" class="form-control form-control-sm inp-discount" name="rows[{{ $product->id }}][discount]" value="{{ $row?->discount ?? 0 }}"></td>
+                            <td>
+                                <input type="number" step="0.01" min="0" class="form-control form-control-sm inp-discount" name="rows[{{ $product->id }}][discount]" value="{{ $row?->discount ?? 0 }}">
+                                @if ($offer)
+                                    <button type="button" class="btn btn-sm btn-outline-info mt-1 btn-apply-offer" style="font-size:.7rem;">Apply offer</button>
+                                @endif
+                            </td>
                             <td class="text-end out-net fw-semibold">{{ number_format($row?->net_amount ?? 0, 2) }}</td>
                         </tr>
                     @endforeach
@@ -182,6 +208,32 @@ function recalcAll() {
 
 document.addEventListener('input', (e) => {
     if (e.target.matches('.inp-ctn, .inp-pcs, .inp-unload, .inp-discount, #inpCollection, #inpCrCollection')) {
+        recalcAll();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (e.target.matches('.btn-apply-offer')) {
+        const row = e.target.closest('.product-row');
+        const price = parseFloat(row.dataset.price) || 0;
+        const salesPcs = parseFloat(row.querySelector('.out-sales').textContent) || 0;
+        const buyQty = parseFloat(row.dataset.offerBuyQty) || 0;
+        const type = row.dataset.offerType;
+
+        if (buyQty <= 0) return;
+        const triggers = Math.floor(salesPcs / buyQty);
+        let discount = 0;
+        if (triggers > 0) {
+            if (type === 'free_qty') {
+                const freeQty = parseFloat(row.dataset.offerFreeQty) || 0;
+                discount = triggers * freeQty * price;
+            } else {
+                const discountAmount = parseFloat(row.dataset.offerDiscountAmount) || 0;
+                discount = triggers * discountAmount;
+            }
+        }
+
+        row.querySelector('.inp-discount').value = fmt(discount);
         recalcAll();
     }
 });

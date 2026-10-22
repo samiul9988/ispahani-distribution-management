@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CashCreditEntry;
 use App\Models\DailySale;
+use App\Models\FreeOffer;
 use App\Models\Product;
 use App\Models\SalesRep;
 use Illuminate\Http\RedirectResponse;
@@ -41,6 +42,11 @@ class DailySaleController extends Controller
         $salesReps = SalesRep::where('is_active', true)->orderBy('name')->get();
         $products = Product::where('is_active', true)->orderBy('name')->get();
 
+        $offers = FreeOffer::activeOn($saleDate)
+            ->whereIn('product_id', $products->pluck('id'))
+            ->get()
+            ->keyBy('product_id');
+
         $existing = [];
         $existingCredit = null;
         $openingBalance = 0;
@@ -67,6 +73,7 @@ class DailySaleController extends Controller
             'existing' => $existing,
             'existingCredit' => $existingCredit,
             'openingBalance' => $openingBalance,
+            'offers' => $offers,
         ]);
     }
 
