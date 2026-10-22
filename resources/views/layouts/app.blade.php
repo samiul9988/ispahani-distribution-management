@@ -94,15 +94,33 @@
             <a href="{{ route('dashboard') }}" class="nav-link-custom {{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i>Dashboard</a>
 
             <div class="nav-group-label">Masters</div>
-            <a href="{{ route('products.index') }}" class="nav-link-custom {{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam"></i>Products</a>
+            <a href="#productsSub" data-bs-toggle="collapse" class="nav-link-custom {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                <i class="bi bi-box-seam"></i>Products <i class="bi bi-chevron-down ms-auto" style="font-size:.7rem;"></i>
+            </a>
+            <div class="collapse {{ request()->routeIs('products.*') ? 'show' : '' }}" id="productsSub">
+                <a href="{{ route('products.index') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.index') ? 'active' : '' }}">All Products</a>
+                <a href="{{ route('products.create') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.create') ? 'active' : '' }}">Add Product</a>
+                <a href="{{ route('products.multi-add') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.multi-add') ? 'active' : '' }}">Multi Add Product</a>
+                <a href="{{ route('products.low-stock') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.low-stock') ? 'active' : '' }}">Low Stock</a>
+                <a href="{{ route('products.bulk-edit') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.bulk-edit') ? 'active' : '' }}">Bulk Operations</a>
+            </div>
+            <a href="{{ route('pack-types.index') }}" class="nav-link-custom {{ request()->routeIs('pack-types.*') ? 'active' : '' }}"><i class="bi bi-rulers"></i>Pack & Quantity Types</a>
             <a href="{{ route('categories.index') }}" class="nav-link-custom {{ request()->routeIs('categories.*') ? 'active' : '' }}"><i class="bi bi-tags"></i>Categories</a>
             <a href="{{ route('suppliers.index') }}" class="nav-link-custom {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-building"></i>Suppliers</a>
+            <a href="{{ route('retailers.index') }}" class="nav-link-custom {{ request()->routeIs('retailers.*') ? 'active' : '' }}"><i class="bi bi-people"></i>Customers</a>
             <a href="{{ route('sales-reps.index') }}" class="nav-link-custom {{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge"></i>Sales Reps (DSR)</a>
             <a href="{{ route('markets.index') }}" class="nav-link-custom {{ request()->routeIs('markets.*') ? 'active' : '' }}"><i class="bi bi-map"></i>Markets</a>
 
             <div class="nav-group-label">Operations</div>
+            <a href="#purchaseSub" data-bs-toggle="collapse" class="nav-link-custom {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}">
+                <i class="bi bi-receipt-cutoff"></i>Purchase Orders <i class="bi bi-chevron-down ms-auto" style="font-size:.7rem;"></i>
+            </a>
+            <div class="collapse {{ request()->routeIs('purchase-orders.*') ? 'show' : '' }}" id="purchaseSub">
+                <a href="{{ route('purchase-orders.index') }}" class="nav-link-custom ps-4 {{ request()->routeIs('purchase-orders.index') ? 'active' : '' }}">All Purchase Orders</a>
+                <a href="{{ route('purchase-orders.create') }}" class="nav-link-custom ps-4 {{ request()->routeIs('purchase-orders.create') ? 'active' : '' }}">Create Purchase Order</a>
+            </div>
             <a href="{{ route('daily-sales.index') }}" class="nav-link-custom {{ request()->routeIs('daily-sales.*') ? 'active' : '' }}"><i class="bi bi-cart-check"></i>Sales</a>
-            <a href="{{ route('liftings.index') }}" class="nav-link-custom {{ request()->routeIs('liftings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-in-down"></i>Lifting / Purchases</a>
+            <a href="{{ route('liftings.index') }}" class="nav-link-custom {{ request()->routeIs('liftings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-in-down"></i>Lifting (Quick Entry)</a>
             <a href="{{ route('stock.index') }}" class="nav-link-custom {{ request()->routeIs('stock.*') ? 'active' : '' }}"><i class="bi bi-boxes"></i>Stock Ledger</a>
             <a href="{{ route('free-offers.index') }}" class="nav-link-custom {{ request()->routeIs('free-offers.*') ? 'active' : '' }}"><i class="bi bi-gift"></i>Free Offers</a>
             <a href="{{ route('damaged-stock.index') }}" class="nav-link-custom {{ request()->routeIs('damaged-stock.*') ? 'active' : '' }}"><i class="bi bi-exclamation-triangle"></i>Damaged Stock</a>
