@@ -10,6 +10,8 @@
         ['route' => 'reports.product-wise', 'icon' => 'box-seam', 'title' => 'Product-wise Report', 'desc' => 'Per-product sales qty, taka, discount, net.'],
         ['route' => 'reports.stock', 'icon' => 'boxes', 'title' => 'Stock Report', 'desc' => 'Opening, lifted, sold, closing stock & valuation as of a date.'],
         ['route' => 'reports.credit', 'icon' => 'cash-coin', 'title' => 'Credit & Collection Report', 'desc' => 'Daily cash/credit ledger per SR over a date range.'],
+        ['route' => 'reports.sales-summary', 'icon' => 'graph-up', 'title' => 'Sales Summary', 'desc' => 'Daily sales totals over a date range.'],
+        ['route' => 'reports.closing-summary', 'icon' => 'safe', 'title' => 'Closing Summary', 'desc' => 'Cash Box opening/closing history over a date range.'],
     ] as $card)
         <div class="col-md-4">
             <a href="{{ route($card['route']) }}" class="text-decoration-none">

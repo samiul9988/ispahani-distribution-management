@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ArrayExport;
+use App\Models\CashBox;
 use App\Models\CashCreditEntry;
 use App\Models\DailySale;
 use App\Models\Lifting;
@@ -20,6 +21,58 @@ class ReportController extends Controller
     public function index(): View
     {
         return view('reports.index');
+    }
+
+    public function salesSummary(Request $request): View|Response
+    {
+        [$from, $to] = $this->dateRangeAndRep($request);
+
+        $rows = DailySale::whereBetween('sale_date', [$from, $to])
+            ->selectRaw('sale_date, SUM(total_taka) as total_taka, SUM(discount) as total_discount, SUM(net_amount) as total_net')
+            ->groupBy('sale_date')
+            ->orderBy('sale_date')
+            ->get()
+            ->map(fn ($r) => [
+                'Date' => $r->sale_date->format('Y-m-d'),
+                'Total Taka' => round($r->total_taka, 2),
+                'Discount' => round($r->total_discount, 2),
+                'Net Amount' => round($r->total_net, 2),
+            ]);
+
+        $headings = ['Date', 'Total Taka', 'Discount', 'Net Amount'];
+
+        if ($export = $this->maybeExport($request, $rows, $headings, 'sales-summary')) {
+            return $export;
+        }
+
+        return view('reports.sales_summary', compact('rows', 'from', 'to'));
+    }
+
+    public function closingSummary(Request $request): View|Response
+    {
+        [$from, $to] = $this->dateRangeAndRep($request);
+
+        $rows = CashBox::whereBetween('cash_date', [$from, $to])
+            ->orderBy('cash_date')
+            ->get()
+            ->map(fn ($c) => [
+                'Date' => $c->cash_date->format('Y-m-d'),
+                'Opening' => round($c->opening_balance, 2),
+                'Collection' => round($c->total_collection, 2),
+                'Credit Collection' => round($c->total_credit_collection, 2),
+                'Expense' => round($c->total_expense, 2),
+                'Supplier Payment' => round($c->total_supplier_payment, 2),
+                'Adjustment' => round($c->adjustment, 2),
+                'Closing' => round($c->closing_balance, 2),
+            ]);
+
+        $headings = ['Date', 'Opening', 'Collection', 'Credit Collection', 'Expense', 'Supplier Payment', 'Adjustment', 'Closing'];
+
+        if ($export = $this->maybeExport($request, $rows, $headings, 'closing-summary')) {
+            return $export;
+        }
+
+        return view('reports.closing_summary', compact('rows', 'from', 'to'));
     }
 
     public function dailySales(Request $request): View|Response

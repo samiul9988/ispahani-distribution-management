@@ -127,15 +127,30 @@
             <a href="{{ route('damage-sendings.index') }}" class="nav-link-custom {{ request()->routeIs('damage-sendings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-up"></i>Damage Sendings</a>
 
             <div class="nav-group-label">Accounting</div>
+            <a href="{{ route('transactions.index') }}" class="nav-link-custom {{ request()->routeIs('transactions.*') ? 'active' : '' }}"><i class="bi bi-list-ul"></i>Transactions</a>
             <a href="{{ route('cash-credit.index') }}" class="nav-link-custom {{ request()->routeIs('cash-credit.*') ? 'active' : '' }}"><i class="bi bi-cash-coin"></i>Cash & Credit</a>
             <a href="{{ route('cash-box.index') }}" class="nav-link-custom {{ request()->routeIs('cash-box.*') ? 'active' : '' }}"><i class="bi bi-safe"></i>Cash Box</a>
             <a href="{{ route('supplier-payments.index') }}" class="nav-link-custom {{ request()->routeIs('supplier-payments.*') ? 'active' : '' }}"><i class="bi bi-receipt"></i>Supplier Payment</a>
+            <a href="{{ route('incentives.index') }}" class="nav-link-custom {{ request()->routeIs('incentives.*') ? 'active' : '' }}"><i class="bi bi-award"></i>Incentive</a>
+            <a href="{{ route('payments.index') }}" class="nav-link-custom {{ request()->routeIs('payments.*') ? 'active' : '' }}"><i class="bi bi-credit-card"></i>Payments</a>
             <a href="{{ route('expenses.index') }}" class="nav-link-custom {{ request()->routeIs('expenses.*') ? 'active' : '' }}"><i class="bi bi-wallet2"></i>Expenses</a>
 
-            <div class="nav-group-label">Reports & System</div>
+            <div class="nav-group-label">Reports</div>
             <a href="{{ route('reports.index') }}" class="nav-link-custom {{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line"></i>Reports</a>
+
+            <div class="nav-group-label">HRM</div>
+            <a href="{{ route('staff-attendance.index') }}" class="nav-link-custom {{ request()->routeIs('staff-attendance.*') ? 'active' : '' }}"><i class="bi bi-calendar-check"></i>Attendance</a>
+            <a href="{{ route('staff-leave.index') }}" class="nav-link-custom {{ request()->routeIs('staff-leave.*') ? 'active' : '' }}"><i class="bi bi-calendar-x"></i>Leave</a>
+            <a href="{{ route('staff-salary.index') }}" class="nav-link-custom {{ request()->routeIs('staff-salary.*') ? 'active' : '' }}"><i class="bi bi-cash-stack"></i>Staff Salary</a>
+            <a href="{{ route('staff.index') }}" class="nav-link-custom {{ request()->routeIs('staff.index') ? 'active' : '' }}"><i class="bi bi-people"></i>Staff List</a>
+            <a href="{{ route('staff.create') }}" class="nav-link-custom {{ request()->routeIs('staff.create') ? 'active' : '' }}"><i class="bi bi-person-plus"></i>Add Staff</a>
+
+            <div class="nav-group-label">System</div>
             <a href="{{ route('audit-logs.index') }}" class="nav-link-custom {{ request()->routeIs('audit-logs.*') ? 'active' : '' }}"><i class="bi bi-clock-history"></i>Audit Log</a>
-            <a href="{{ route('company-profile.edit') }}" class="nav-link-custom {{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-gear"></i>Company Profile</a>
+            <a href="{{ route('users.index') }}" class="nav-link-custom {{ request()->routeIs('users.*') ? 'active' : '' }}"><i class="bi bi-person-badge"></i>Users</a>
+            <a href="{{ route('company-profile.edit') }}" class="nav-link-custom {{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building"></i>Company Profile</a>
+            <a href="{{ route('settings.edit') }}" class="nav-link-custom {{ request()->routeIs('settings.*') ? 'active' : '' }}"><i class="bi bi-gear"></i>Settings</a>
+            <a href="{{ route('support.index') }}" class="nav-link-custom {{ request()->routeIs('support.*') ? 'active' : '' }}"><i class="bi bi-headset"></i>Support</a>
         </div>
         <div class="sidebar-user">
             <div class="avatar">{{ strtoupper(substr(auth()->user()?->name ?? 'A', 0, 1)) }}</div>

@@ -22,12 +22,19 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SalesRepController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StaffAttendanceController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffLeaveController;
+use App\Http\Controllers\StaffSalaryController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierPaymentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
+use App\Models\CompanyProfile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -66,6 +73,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/product-wise', [ReportController::class, 'productWise'])->name('reports.product-wise');
     Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
     Route::get('/reports/credit', [ReportController::class, 'credit'])->name('reports.credit');
+    Route::get('/reports/sales-summary', [ReportController::class, 'salesSummary'])->name('reports.sales-summary');
+    Route::get('/reports/closing-summary', [ReportController::class, 'closingSummary'])->name('reports.closing-summary');
 
     Route::get('/company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile.edit');
     Route::put('/company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
@@ -78,6 +87,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+
+    Route::resource('users', UserController::class)->except(['show']);
+
+    Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    Route::get('/support', fn () => view('support.index', ['company' => CompanyProfile::first()]))->name('support.index');
+
+    Route::resource('staff', StaffController::class)->except('show');
+    Route::get('/staff-attendance', [StaffAttendanceController::class, 'index'])->name('staff-attendance.index');
+    Route::post('/staff-attendance', [StaffAttendanceController::class, 'save'])->name('staff-attendance.save');
+    Route::resource('staff-leave', StaffLeaveController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::put('/staff-leave/{staffLeave}/status', [StaffLeaveController::class, 'updateStatus'])->name('staff-leave.status');
+    Route::get('/staff-salary', [StaffSalaryController::class, 'index'])->name('staff-salary.index');
+    Route::post('/staff-salary', [StaffSalaryController::class, 'store'])->name('staff-salary.store');
+    Route::post('/staff-salary/{staffSalary}/mark-paid', [StaffSalaryController::class, 'markPaid'])->name('staff-salary.mark-paid');
 
     Route::get('/daily-sales', [DailySaleController::class, 'index'])->name('daily-sales.index');
     Route::get('/daily-sales/entry', [DailySaleController::class, 'entry'])->name('daily-sales.entry');
