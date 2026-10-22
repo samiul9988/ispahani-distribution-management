@@ -23,8 +23,11 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\IncentiveController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierPaymentController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -69,6 +72,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('suppliers', SupplierController::class)->except('show');
     Route::resource('supplier-payments', SupplierPaymentController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::resource('incentives', IncentiveController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('payments', PaymentController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
