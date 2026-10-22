@@ -17,6 +17,9 @@ class ProductSeeder extends Seeder
                 ['name' => $product['name']],
                 [
                     'price' => $product['price'],
+                    // Placeholder assumption (actual Ispahani cost price not in the source sheet):
+                    // 85% of selling price. Edit per-product once real purchase costs are known.
+                    'cost_price' => round($product['price'] * 0.85, 2),
                     'pic' => $product['pic'],
                 ]
             );

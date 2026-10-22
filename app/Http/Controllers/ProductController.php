@@ -64,6 +64,7 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
+            'cost_price' => ['nullable', 'numeric', 'min:0'],
             'pic' => ['required', 'integer', 'min:1'],
             'opening_stock_ctn' => ['nullable', 'numeric', 'min:0'],
             'opening_stock_pcs' => ['nullable', 'numeric', 'min:0'],
@@ -75,6 +76,7 @@ class ProductController extends Controller
         $data['opening_stock_ctn'] = $data['opening_stock_ctn'] ?? 0;
         $data['opening_stock_pcs'] = $data['opening_stock_pcs'] ?? 0;
         $data['low_stock_threshold_ctn'] = $data['low_stock_threshold_ctn'] ?? 5;
+        $data['cost_price'] = $data['cost_price'] ?? 0;
 
         return $data;
     }
