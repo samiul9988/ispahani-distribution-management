@@ -44,6 +44,6 @@
     <input type="number" name="low_stock_threshold_ctn" class="form-control" value="{{ old('low_stock_threshold_ctn', $p?->low_stock_threshold_ctn ?? 5) }}">
 </div>
 <div class="mb-3 form-check">
-    <input type="checkbox" name="is_active" class="form-check-input" id="is_active" {{ old('is_active', $p?->is_active ?? true) ? 'checked' : '' }}>
+    <input type="checkbox" name="is_active" value="1" class="form-check-input" id="is_active" {{ old('is_active', $p?->is_active ?? true) ? 'checked' : '' }}>
     <label class="form-check-label" for="is_active">Active</label>
 </div>

@@ -91,9 +91,13 @@
             <div class="brand-text">Ispahani Distributor</div>
         </div>
         <div class="sidebar-scroll">
+            @php $__u = auth()->user(); @endphp
             <a href="{{ route('dashboard') }}" class="nav-link-custom {{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i>Dashboard</a>
 
+            @if ($__u?->hasPermission('products') || $__u?->hasPermission('pack-types') || $__u?->hasPermission('categories') || $__u?->hasPermission('suppliers') || $__u?->hasPermission('retailers') || $__u?->hasPermission('sales-reps') || $__u?->hasPermission('markets'))
             <div class="nav-group-label">Masters</div>
+            @endif
+            @can('products')
             <a href="#productsSub" data-bs-toggle="collapse" class="nav-link-custom {{ request()->routeIs('products.*') ? 'active' : '' }}">
                 <i class="bi bi-box-seam"></i>Products <i class="bi bi-chevron-down ms-auto" style="font-size:.7rem;"></i>
             </a>
@@ -104,14 +108,30 @@
                 <a href="{{ route('products.low-stock') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.low-stock') ? 'active' : '' }}">Low Stock</a>
                 <a href="{{ route('products.bulk-edit') }}" class="nav-link-custom ps-4 {{ request()->routeIs('products.bulk-edit') ? 'active' : '' }}">Bulk Operations</a>
             </div>
+            @endcan
+            @can('pack-types')
             <a href="{{ route('pack-types.index') }}" class="nav-link-custom {{ request()->routeIs('pack-types.*') ? 'active' : '' }}"><i class="bi bi-rulers"></i>Pack & Quantity Types</a>
+            @endcan
+            @can('categories')
             <a href="{{ route('categories.index') }}" class="nav-link-custom {{ request()->routeIs('categories.*') ? 'active' : '' }}"><i class="bi bi-tags"></i>Categories</a>
+            @endcan
+            @can('suppliers')
             <a href="{{ route('suppliers.index') }}" class="nav-link-custom {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-building"></i>Suppliers</a>
+            @endcan
+            @can('retailers')
             <a href="{{ route('retailers.index') }}" class="nav-link-custom {{ request()->routeIs('retailers.*') ? 'active' : '' }}"><i class="bi bi-people"></i>Customers</a>
+            @endcan
+            @can('sales-reps')
             <a href="{{ route('sales-reps.index') }}" class="nav-link-custom {{ request()->routeIs('sales-reps.*') ? 'active' : '' }}"><i class="bi bi-person-badge"></i>Sales Reps (DSR)</a>
+            @endcan
+            @can('markets')
             <a href="{{ route('markets.index') }}" class="nav-link-custom {{ request()->routeIs('markets.*') ? 'active' : '' }}"><i class="bi bi-map"></i>Markets</a>
+            @endcan
 
+            @if ($__u?->hasPermission('purchase-orders') || $__u?->hasPermission('daily-sales') || $__u?->hasPermission('liftings') || $__u?->hasPermission('stock') || $__u?->hasPermission('free-offers') || $__u?->hasPermission('damaged-stock') || $__u?->hasPermission('damage-sendings'))
             <div class="nav-group-label">Operations</div>
+            @endif
+            @can('purchase-orders')
             <a href="#purchaseSub" data-bs-toggle="collapse" class="nav-link-custom {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}">
                 <i class="bi bi-receipt-cutoff"></i>Purchase Orders <i class="bi bi-chevron-down ms-auto" style="font-size:.7rem;"></i>
             </a>
@@ -119,38 +139,92 @@
                 <a href="{{ route('purchase-orders.index') }}" class="nav-link-custom ps-4 {{ request()->routeIs('purchase-orders.index') ? 'active' : '' }}">All Purchase Orders</a>
                 <a href="{{ route('purchase-orders.create') }}" class="nav-link-custom ps-4 {{ request()->routeIs('purchase-orders.create') ? 'active' : '' }}">Create Purchase Order</a>
             </div>
+            @endcan
+            @can('daily-sales')
             <a href="{{ route('daily-sales.index') }}" class="nav-link-custom {{ request()->routeIs('daily-sales.*') ? 'active' : '' }}"><i class="bi bi-cart-check"></i>Sales</a>
+            @endcan
+            @can('liftings')
             <a href="{{ route('liftings.index') }}" class="nav-link-custom {{ request()->routeIs('liftings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-in-down"></i>Lifting (Quick Entry)</a>
+            @endcan
+            @can('stock')
             <a href="{{ route('stock.index') }}" class="nav-link-custom {{ request()->routeIs('stock.*') ? 'active' : '' }}"><i class="bi bi-boxes"></i>Stock Ledger</a>
+            @endcan
+            @can('free-offers')
             <a href="{{ route('free-offers.index') }}" class="nav-link-custom {{ request()->routeIs('free-offers.*') ? 'active' : '' }}"><i class="bi bi-gift"></i>Free Offers</a>
+            @endcan
+            @can('damaged-stock')
             <a href="{{ route('damaged-stock.index') }}" class="nav-link-custom {{ request()->routeIs('damaged-stock.*') ? 'active' : '' }}"><i class="bi bi-exclamation-triangle"></i>Damaged Stock</a>
+            @endcan
+            @can('damage-sendings')
             <a href="{{ route('damage-sendings.index') }}" class="nav-link-custom {{ request()->routeIs('damage-sendings.*') ? 'active' : '' }}"><i class="bi bi-box-arrow-up"></i>Damage Sendings</a>
+            @endcan
 
+            @if ($__u?->hasPermission('transactions') || $__u?->hasPermission('cash-credit') || $__u?->hasPermission('cash-box') || $__u?->hasPermission('supplier-payments') || $__u?->hasPermission('incentives') || $__u?->hasPermission('payments') || $__u?->hasPermission('expenses'))
             <div class="nav-group-label">Accounting</div>
+            @endif
+            @can('transactions')
             <a href="{{ route('transactions.index') }}" class="nav-link-custom {{ request()->routeIs('transactions.*') ? 'active' : '' }}"><i class="bi bi-list-ul"></i>Transactions</a>
+            @endcan
+            @can('cash-credit')
             <a href="{{ route('cash-credit.index') }}" class="nav-link-custom {{ request()->routeIs('cash-credit.*') ? 'active' : '' }}"><i class="bi bi-cash-coin"></i>Cash & Credit</a>
+            @endcan
+            @can('cash-box')
             <a href="{{ route('cash-box.index') }}" class="nav-link-custom {{ request()->routeIs('cash-box.*') ? 'active' : '' }}"><i class="bi bi-safe"></i>Cash Box</a>
+            @endcan
+            @can('supplier-payments')
             <a href="{{ route('supplier-payments.index') }}" class="nav-link-custom {{ request()->routeIs('supplier-payments.*') ? 'active' : '' }}"><i class="bi bi-receipt"></i>Supplier Payment</a>
+            @endcan
+            @can('incentives')
             <a href="{{ route('incentives.index') }}" class="nav-link-custom {{ request()->routeIs('incentives.*') ? 'active' : '' }}"><i class="bi bi-award"></i>Incentive</a>
+            @endcan
+            @can('payments')
             <a href="{{ route('payments.index') }}" class="nav-link-custom {{ request()->routeIs('payments.*') ? 'active' : '' }}"><i class="bi bi-credit-card"></i>Payments</a>
+            @endcan
+            @can('expenses')
             <a href="{{ route('expenses.index') }}" class="nav-link-custom {{ request()->routeIs('expenses.*') ? 'active' : '' }}"><i class="bi bi-wallet2"></i>Expenses</a>
+            @endcan
 
+            @can('reports')
             <div class="nav-group-label">Reports</div>
             <a href="{{ route('reports.index') }}" class="nav-link-custom {{ request()->routeIs('reports.*') ? 'active' : '' }}"><i class="bi bi-bar-chart-line"></i>Reports</a>
+            @endcan
 
+            @if ($__u?->hasPermission('staff-attendance') || $__u?->hasPermission('staff-leave') || $__u?->hasPermission('staff-salary') || $__u?->hasPermission('staff'))
             <div class="nav-group-label">HRM</div>
+            @endif
+            @can('staff-attendance')
             <a href="{{ route('staff-attendance.index') }}" class="nav-link-custom {{ request()->routeIs('staff-attendance.*') ? 'active' : '' }}"><i class="bi bi-calendar-check"></i>Attendance</a>
+            @endcan
+            @can('staff-leave')
             <a href="{{ route('staff-leave.index') }}" class="nav-link-custom {{ request()->routeIs('staff-leave.*') ? 'active' : '' }}"><i class="bi bi-calendar-x"></i>Leave</a>
+            @endcan
+            @can('staff-salary')
             <a href="{{ route('staff-salary.index') }}" class="nav-link-custom {{ request()->routeIs('staff-salary.*') ? 'active' : '' }}"><i class="bi bi-cash-stack"></i>Staff Salary</a>
+            @endcan
+            @can('staff')
             <a href="{{ route('staff.index') }}" class="nav-link-custom {{ request()->routeIs('staff.index') ? 'active' : '' }}"><i class="bi bi-people"></i>Staff List</a>
             <a href="{{ route('staff.create') }}" class="nav-link-custom {{ request()->routeIs('staff.create') ? 'active' : '' }}"><i class="bi bi-person-plus"></i>Add Staff</a>
+            @endcan
 
+            @if ($__u?->hasPermission('audit-logs') || $__u?->isAdmin() || $__u?->hasPermission('company-profile') || $__u?->hasPermission('settings') || $__u?->hasPermission('support'))
             <div class="nav-group-label">System</div>
+            @endif
+            @can('audit-logs')
             <a href="{{ route('audit-logs.index') }}" class="nav-link-custom {{ request()->routeIs('audit-logs.*') ? 'active' : '' }}"><i class="bi bi-clock-history"></i>Audit Log</a>
+            @endcan
+            @if ($__u?->isAdmin())
             <a href="{{ route('users.index') }}" class="nav-link-custom {{ request()->routeIs('users.*') ? 'active' : '' }}"><i class="bi bi-person-badge"></i>Users</a>
+            <a href="{{ route('role-permissions.edit') }}" class="nav-link-custom {{ request()->routeIs('role-permissions.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i>Roles & Permissions</a>
+            @endif
+            @can('company-profile')
             <a href="{{ route('company-profile.edit') }}" class="nav-link-custom {{ request()->routeIs('company-profile.*') ? 'active' : '' }}"><i class="bi bi-building"></i>Company Profile</a>
+            @endcan
+            @can('settings')
             <a href="{{ route('settings.edit') }}" class="nav-link-custom {{ request()->routeIs('settings.*') ? 'active' : '' }}"><i class="bi bi-gear"></i>Settings</a>
+            @endcan
+            @can('support')
             <a href="{{ route('support.index') }}" class="nav-link-custom {{ request()->routeIs('support.*') ? 'active' : '' }}"><i class="bi bi-headset"></i>Support</a>
+            @endcan
         </div>
         <div class="sidebar-user">
             <div class="avatar">{{ strtoupper(substr(auth()->user()?->name ?? 'A', 0, 1)) }}</div>

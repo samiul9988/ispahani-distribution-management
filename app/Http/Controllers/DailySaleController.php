@@ -16,11 +16,16 @@ class DailySaleController extends Controller
 {
     public function index(Request $request): View
     {
-        $salesReps = SalesRep::orderBy('name')->get();
+        $user = $request->user();
+
+        $salesReps = $user->isSalesRep()
+            ? SalesRep::where('id', $user->sales_rep_id)->get()
+            : SalesRep::orderBy('name')->get();
 
         $summaries = DailySale::query()
             ->select('sale_date', 'sales_rep_id')
             ->selectRaw('SUM(total_taka) as total_taka, SUM(discount) as total_discount, SUM(net_amount) as total_net')
+            ->when($user->isSalesRep(), fn ($query) => $query->where('sales_rep_id', $user->sales_rep_id))
             ->groupBy('sale_date', 'sales_rep_id')
             ->with('salesRep')
             ->orderByDesc('sale_date')
@@ -31,15 +36,20 @@ class DailySaleController extends Controller
 
     public function entry(Request $request): View
     {
+        $user = $request->user();
+
         $data = $request->validate([
             'sale_date' => ['nullable', 'date'],
             'sales_rep_id' => ['nullable', 'exists:sales_reps,id'],
         ]);
 
         $saleDate = $data['sale_date'] ?? now()->format('Y-m-d');
-        $salesRepId = $data['sales_rep_id'] ?? null;
+        $salesRepId = $user->isSalesRep() ? $user->sales_rep_id : ($data['sales_rep_id'] ?? null);
 
-        $salesReps = SalesRep::where('is_active', true)->orderBy('name')->get();
+        $salesReps = $user->isSalesRep()
+            ? SalesRep::where('id', $user->sales_rep_id)->get()
+            : SalesRep::where('is_active', true)->orderBy('name')->get();
+
         $products = Product::where('is_active', true)->orderBy('name')->get();
 
         $offers = FreeOffer::activeOn($saleDate)
@@ -79,6 +89,8 @@ class DailySaleController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
+        $user = $request->user();
+
         $validated = $request->validate([
             'sale_date' => ['required', 'date'],
             'sales_rep_id' => ['required', 'exists:sales_reps,id'],
@@ -94,6 +106,10 @@ class DailySaleController extends Controller
 
         $saleDate = $validated['sale_date'];
         $salesRepId = $validated['sales_rep_id'];
+
+        // SR logins can only ever write their own rep's data, no matter what
+        // the form posted — this is the authorization boundary, not the UI.
+        abort_unless(! $user->isSalesRep() || $salesRepId == $user->sales_rep_id, 403);
 
         DB::transaction(function () use ($validated, $saleDate, $salesRepId) {
             foreach ($validated['rows'] as $productId => $row) {

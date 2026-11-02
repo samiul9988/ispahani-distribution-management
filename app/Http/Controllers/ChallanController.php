@@ -18,6 +18,9 @@ class ChallanController extends Controller
             'sales_rep_id' => ['required', 'exists:sales_reps,id'],
         ]);
 
+        $user = $request->user();
+        abort_unless(! $user->isSalesRep() || $data['sales_rep_id'] == $user->sales_rep_id, 403);
+
         $rep = SalesRep::with('market')->findOrFail($data['sales_rep_id']);
         $company = CompanyProfile::first();
 

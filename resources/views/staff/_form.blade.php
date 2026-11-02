@@ -23,6 +23,6 @@
     <input type="number" step="0.01" name="monthly_salary" class="form-control" value="{{ old('monthly_salary', $s?->monthly_salary ?? 0) }}">
 </div>
 <div class="mb-3 form-check">
-    <input type="checkbox" name="is_active" class="form-check-input" id="is_active" {{ old('is_active', $s?->is_active ?? true) ? 'checked' : '' }}>
+    <input type="checkbox" name="is_active" value="1" class="form-check-input" id="is_active" {{ old('is_active', $s?->is_active ?? true) ? 'checked' : '' }}>
     <label class="form-check-label" for="is_active">Active</label>
 </div>

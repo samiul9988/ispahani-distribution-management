@@ -9,18 +9,29 @@
             <label class="form-label">Date</label>
             <input type="date" name="sale_date" class="form-control" value="{{ $saleDate }}" required>
         </div>
-        <div class="col-md-4">
-            <label class="form-label">Sales Rep</label>
-            <select name="sales_rep_id" class="form-select" required>
-                <option value="">— Select SR —</option>
-                @foreach ($salesReps as $rep)
-                    <option value="{{ $rep->id }}" @selected($salesRepId == $rep->id)>{{ $rep->name }} ({{ $rep->market?->name }})</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-arrow-repeat"></i> Switch</button>
-        </div>
+        @if (auth()->user()->isSalesRep())
+            <div class="col-md-4">
+                <label class="form-label">Sales Rep</label>
+                <input type="text" class="form-control" value="{{ $salesReps->first()?->name }} ({{ $salesReps->first()?->market?->name }})" disabled>
+                <input type="hidden" name="sales_rep_id" value="{{ $salesRepId }}">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-arrow-repeat"></i> Change Date</button>
+            </div>
+        @else
+            <div class="col-md-4">
+                <label class="form-label">Sales Rep</label>
+                <select name="sales_rep_id" class="form-select" required>
+                    <option value="">— Select SR —</option>
+                    @foreach ($salesReps as $rep)
+                        <option value="{{ $rep->id }}" @selected($salesRepId == $rep->id)>{{ $rep->name }} ({{ $rep->market?->name }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-arrow-repeat"></i> Switch</button>
+            </div>
+        @endif
         @if ($salesRepId)
             <div class="col-md-3 text-end">
                 <a href="{{ route('daily-sales.challan', ['sale_date' => $saleDate, 'sales_rep_id' => $salesRepId]) }}" target="_blank" class="btn btn-outline-danger"><i class="bi bi-printer"></i> Print Challan</a>

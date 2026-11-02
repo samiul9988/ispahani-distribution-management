@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Activation Page Secret
+    |--------------------------------------------------------------------------
+    |
+    | A failsafe secret that lets the /dashboard/activation maintenance-mode
+    | toggle be reached without logging in (via ?key=...), so the site can
+    | always be switched back on even if login itself is broken.
+    |
+    */
+
+    'activation_secret' => env('ACTIVATION_SECRET'),
+
 ];

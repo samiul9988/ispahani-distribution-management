@@ -10,13 +10,14 @@
 <div class="card">
     <div class="table-responsive">
         <table class="table mb-0">
-            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th class="text-end">Actions</th></tr></thead>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Sales Rep</th><th class="text-end">Actions</th></tr></thead>
             <tbody>
                 @foreach ($users as $u)
                     <tr>
                         <td>{{ $u->name }}</td>
                         <td>{{ $u->email }}</td>
-                        <td><span class="badge bg-secondary">{{ ucfirst($u->role) }}</span></td>
+                        <td><span class="badge bg-secondary">{{ $u->role === 'sr' ? 'Sales Rep' : ucfirst($u->role) }}</span></td>
+                        <td>{{ $u->salesRep?->name ?? '—' }}</td>
                         <td class="text-end">
                             <a href="{{ route('users.edit', $u) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                             @if ($u->id !== auth()->id())
